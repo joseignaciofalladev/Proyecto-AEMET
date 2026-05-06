@@ -12,12 +12,12 @@ function WeatherCard({ weather }) {
 
       <p><strong>Fecha:</strong> {weather.fecha}</p>
 
-      <p>🌡️ Max: {weather.temperatura.max}°C</p>
-      <p>🌡️ Min: {weather.temperatura.min}°C</p>
+      <p>Max: {weather.temperatura.max}°C</p>
+      <p>Min: {weather.temperatura.min}°C</p>
 
-      <p>☁️ {weather.estadoCielo}</p>
-      <p>🌧️ {weather.lluvia}% lluvia</p>
-      <p>💨 {weather.viento} km/h</p>
+      <p>{weather.estadoCielo}</p>
+      <p>{weather.lluvia}% lluvia</p>
+      <p>{weather.viento} km/h</p>
     </div>
   );
 }
