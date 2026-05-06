@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getWeather } from "./services/weatherService";
+import WeatherCard from "./components/WeatherCard";
 
 function App() {
 
@@ -60,20 +61,7 @@ function App() {
       {error && <p>{error}</p>}
 
       {/* muestreo del weather, aun no siendo componente para ver si funciona la conexion end a end */}
-      {weather && (
-        <div>
-          <h2>{weather.municipio}</h2>
-          <p>Provincia: {weather.provincia}</p>
-          <p>Fecha: {weather.fecha}</p>
-
-          <p>Temp max: {weather.temperatura.max}°C</p>
-          <p>Temp min: {weather.temperatura.min}°C</p>
-
-          <p>{weather.estadoCielo}</p>
-          <p>Lluvia: {weather.lluvia}%</p>
-          <p>Viento: {weather.viento} km/h</p>
-        </div>
-      )}
+      {weather && <WeatherCard weather={weather} />}
     </div>
   );
 
