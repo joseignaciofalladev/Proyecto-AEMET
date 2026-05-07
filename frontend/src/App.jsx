@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getWeather } from "./services/weatherService";
 import WeatherCard from "./components/WeatherCard";
+import { municipios } from "./data/municipios";
 
 function App() {
 
@@ -13,13 +14,12 @@ function App() {
   const handleSearch = async () => {
 
     // validacion bosica: evitar busquedas vacias
-    if (!codigo.trim()) {
-      setError("Introduce un código");
+    if (!codigo) {
+      setError("Elija un municipio, por favor.");
       return;
     }
 
     try {
-
       // para activar el loading y limpiar errores anteriores
       setLoading(true);
       setError("");
@@ -46,13 +46,19 @@ function App() {
     <div>
       <h1>Busqueda por municipio</h1>
 
-      {/* priemr input */}
-      <input
-        type="text"
-        placeholder="Código municipio (ej: 28079)"
+      {/* input nuevo, cambio lo de poner el codigo, por un selector de municipios */}
+      <select
         value={codigo}
         onChange={(e) => setCodigo(e.target.value)}
-      />
+      >
+        <option value="">Selecciona un municipio</option>
+
+        {municipios.map((m) => (
+          <option key={m.codigo} value={m.codigo}>
+            {m.nombre}
+          </option>
+        ))}
+      </select>
 
       <button onClick={handleSearch}>Buscar</button>
 
@@ -65,7 +71,7 @@ function App() {
     </div>
   );
 
-  // para resolver unos errores
+  // para resolver errores
   console.log(data);
   console.log(weather);
 }
