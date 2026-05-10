@@ -1,23 +1,16 @@
 function WeatherCard({ weather }) {
   return (
-    <div style={{
-      marginTop: "20px",
-      padding: "20px",
-      background: "blue",
-      borderRadius: "10px",
-      boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-    }}>
+    <div className="weather-card">
       <h2>{weather.municipio}</h2>
-      <p>{weather.provincia}</p>
 
-      <p><strong>Fecha:</strong> {weather.fecha}</p>
-
-      <p>Max: {weather.temperatura.max}°C</p>
-      <p>Min: {weather.temperatura.min}°C</p>
+      <div className="temp-section">
+        <h1>{weather.temperatura.max}°C</h1>
+        <p>Min: {weather.temperatura.min}°C</p>
+      </div>
 
       <p>{weather.estadoCielo}</p>
-      <p>{weather.lluvia}% lluvia</p>
-      <p>{weather.viento} km/h</p>
+      <p>Lluvia: {weather.lluvia}%</p>
+      <p>Viento: {weather.viento} km/h</p>
     </div>
   );
 }
