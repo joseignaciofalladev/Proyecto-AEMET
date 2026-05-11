@@ -67,27 +67,27 @@ app.get('/api/tiempo/:codigo', async (req, res) => {
     // PROCESAMIENTO DE DATOS
     // Se extrae solo la informacion que interesa
     const datos = prediccion[0];
-    const hoy = datos.prediccion.dia[0];
+    // ahora se obtiene las estadisticas de los siguientes dias del municipio buscado
+    const dias = datos.prediccion.dia.map((dia) => ({
+      fecha: dia.fecha,
+      temperatura: {
+        max: dia.temperatura.maxima,
+        min: dia.temperatura.minima
+      },
+      estadoCielo:
+        dia.estadoCielo.find(e => e.descripcion)?.descripcion || "No disponible",
+      lluvia:
+        dia.probPrecipitacion.find(p => p.value !== "")?.value || 0,
+      viento:
+        dia.viento.find(v => v.velocidad)?.velocidad || 0
+    }));
 
     res.json({
       success: true,
       data: {
         municipio: datos.nombre,
         provincia: datos.provincia,
-
-        // Formateo de fecha: quito la hora
-        // antes se devolvia esto: 2026-05-04T00:00:00
-        fecha: hoy.fecha.split('T')[0],
-
-        temperatura: {
-          max: hoy.temperatura.maxima,
-          min: hoy.temperatura.minima
-        },
-
-        // Uso de optional chaining (?.) para evitar errores si faltan datos
-        estadoCielo: hoy.estadoCielo?.find(e => e.descripcion)?.descripcion || "No disponible",
-        lluvia: hoy.probPrecipitacion?.find(p => p.value !== "")?.value || 0,
-        viento: hoy.viento?.find(v => v.velocidad)?.velocidad || 0
+        dias
       }
     });
 
