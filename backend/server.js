@@ -67,6 +67,7 @@ app.get('/api/tiempo/:codigo', async (req, res) => {
     // PROCESAMIENTO DE DATOS
     // Se extrae solo la informacion que interesa
     const datos = prediccion[0];
+
     // ahora se obtiene las estadisticas de los siguientes dias del municipio buscado
     const dias = datos.prediccion.dia.map((dia) => ({
       fecha: dia.fecha,
@@ -90,7 +91,7 @@ app.get('/api/tiempo/:codigo', async (req, res) => {
         dias
       }
     });
-
+    
   } catch (error) {
     console.error(error);
 
