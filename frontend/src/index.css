@@ -177,7 +177,6 @@ code {
   margin-bottom: 15px;
 }
 
-
 .forecast-container {
   display: flex;
   gap: 10px;
@@ -196,7 +195,6 @@ code {
 .today-weather {
   margin-top: 20px;
 }
-
 
 .dark .today-weather h1, h2 {
   color: white;
