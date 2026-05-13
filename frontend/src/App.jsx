@@ -13,38 +13,50 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
+  // Uso de efectos
+  
+  // para cargar el historial
   useEffect(() => {
     const savedHistory = localStorage.getItem("weatherHistory");
+    if (savedHistory) {setHistory(JSON.parse(savedHistory));}
+  },[]);
 
-    if (savedHistory) {
-      setHistory(JSON.parse(savedHistory));
-    }
-  }, []);
-
+  // para guardar el historial
   useEffect(() => {
     localStorage.setItem(
       "weatherHistory",
       JSON.stringify(history)
     );
-  }, [history]);
+  },[history]);
+
+  // para cargar el modo oscuro
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("darkMode");
+    if (savedTheme) {setDarkMode(JSON.parse(savedTheme));}
+  },[]);
+
+  // para guardar el modo oscuro
+  useEffect(() => {
+    localStorage.setItem("darkMode",JSON.stringify(darkMode));
+  },[darkMode]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearch(value);
 
+    // cuando se ponga dos letras, se filtra y se muestra las coincidencias con los nombres deloc municipios
     if (value.length < 2) {
       setFilteredMunicipios([]);
       return;
     }
 
-    const resultados = municipios.filter((m) =>
-      m.nombre.toLowerCase().includes(value.toLowerCase())
-    );
-
+    const resultados = municipios.filter((m) =>m.nombre.toLowerCase().includes(value.toLowerCase()));
     setFilteredMunicipios(resultados);
   };
 
+  // busqueda del clima
   const handleSelectMunicipio = async (municipio) => {
     try {
       setLoading(true);
@@ -55,19 +67,20 @@ function App() {
       const response = await getWeather(municipio.codigo);
       setWeather(response.data);
 
+      // guarda la nueva busqueda
       const nuevaBusqueda = {
         municipio: municipio.nombre,
         codigo: municipio.codigo,
         fecha: new Date().toLocaleString(),
       };
 
+      // para evitar duplicados en el historial, asi se evita varias busquedas del mismo y se vuelve a la primera fila
       setHistory((prev) => {
-        const filtrado = prev.filter(
-          (item) => item.codigo !== municipio.codigo
-        );
+        const filtrado = prev.filter((item) => item.codigo !== municipio.codigo);
         return [nuevaBusqueda, ...filtrado];
       });
 
+      // captura de error/ finalizacion de carga
     } catch (err) {
       setError("Error obteniendo datos");
     } finally {
@@ -103,10 +116,13 @@ function App() {
   };
 
   return (
-    <div>
+    <div className={darkMode ? "app dark" : "app"}>
       <h1>Busqueda por municipio</h1>
 
-      {/* input nuevo, cambio lo de poner el codigo, por un selector de municipios */}
+      {/* boton de cambio entre modo dia y noche */}
+      <button onClick={() => setDarkMode(!darkMode)}>{darkMode ? "Modo día" : "Modo noche"}</button>
+
+      {/* input nuevo, cambio lo de poner el codigo, por un buscador de municipios */}
       <input
         type="text"
         placeholder="Buscar municipio..."
@@ -114,6 +130,7 @@ function App() {
         onChange={handleSearchChange}
       />
 
+      {/* filtro de municipios, se muestra los municipios filtrados en botones */}
       {filteredMunicipios.length > 0 && (
         <ul className="results-list">
           {filteredMunicipios.map((m) => (
@@ -133,6 +150,7 @@ function App() {
       {/* muestreo del weather */}
       {weather && <WeatherCard weather={weather} />}
 
+      {/* Historial */}
       {history.length > 0 && (
         <div className="history-container">
           <h3>Historial de búsquedas</h3>
