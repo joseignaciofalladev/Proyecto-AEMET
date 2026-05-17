@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getWeather } from "./services/weatherService";
 import { municipios } from "./data/municipios";
 import WeatherCard from "./components/WeatherCard";
+import Header from "./components/Header";
 
 function App() {
 
@@ -117,7 +118,7 @@ function App() {
 
   return (
     <div className={darkMode ? "app dark" : "app"}>
-      <h1>Busqueda por municipio</h1>
+      <Header />
 
       {/* boton de cambio entre modo dia y noche */}
       <button onClick={() => setDarkMode(!darkMode)}>{darkMode ? "Modo día" : "Modo noche"}</button>
